@@ -1,13 +1,28 @@
-import { Fragment } from "react";
+import { Fragment, MouseEvent, useState } from "react";
 function ListGroup() {
   const items = ["a", "b", "c"];
+
+  const eventHandler = (event: MouseEvent) => console.log(event);
+
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
   return (
     <>
       <h2 className="text-center sm:pb-4">lorem</h2>
 
       <ul className=" divide-y divide-gray-200 dark:divide-gray-700">
-        {items.map((item) => (
-          <li key={item} className="pb-3 sm:pb-4">
+        {items.map((item, index) => (
+          <li
+            key={item}
+            onClick={() => {
+              setSelectedIndex(index);
+              console.log(selectedIndex, index);
+            }}
+            className={
+              "b-3 sm:pb-4 " +
+              (selectedIndex === index ? "bg-red-300" : "bg-orange-300")
+            }
+          >
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
                 <img
