@@ -1,5 +1,6 @@
 import Alert from "./Components/Alerts/Danger";
 import ListGroup from "./Components/Lists/ListGroup";
+import Button from "./Components/Button/Button";
 import "./app.css";
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
           ipsam.
         </Alert>
       </div>
+
+      <Button />
     </>
   );
 }
