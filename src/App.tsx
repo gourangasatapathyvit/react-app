@@ -1,5 +1,6 @@
-import Alert from "./Components/Alert";
-import ListGroup from "./Components/ListGroup";
+import Alert from "./Components/Alerts/Danger";
+import ListGroup from "./Components/Lists/ListGroup";
+import "./app.css";
 
 function App() {
   const items = ["a", "b", "c"];
