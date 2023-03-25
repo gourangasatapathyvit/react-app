@@ -1,14 +1,22 @@
 import { Fragment, MouseEvent, useState } from "react";
-function ListGroup() {
-  const items = ["a", "b", "c"];
 
+// pass data vua props
+interface Props {
+  items: string[];
+  header: string;
+
+  // pass func via props
+  onSelectItem: (item: string) => void;
+}
+
+function ListGroup({ items, header, onSelectItem }: Props) {
   const eventHandler = (event: MouseEvent) => console.log(event);
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   return (
     <>
-      <h2 className="text-center sm:pb-4">lorem</h2>
+      <h2 className="text-center sm:pb-4">{header}</h2>
 
       <ul className=" divide-y divide-gray-200 dark:divide-gray-700">
         {items.map((item, index) => (
@@ -16,7 +24,7 @@ function ListGroup() {
             key={item}
             onClick={() => {
               setSelectedIndex(index);
-              console.log(selectedIndex, index);
+              onSelectItem(item);
             }}
             className={
               "b-3 sm:pb-4 " +
