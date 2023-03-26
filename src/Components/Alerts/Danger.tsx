@@ -9,6 +9,8 @@ const UlElement = styled.div`
 `;
 
 interface Props {
+  //  ? represents that it's a optional element
+  // if you want to send HTML like structure from parent
   children?: ReactNode;
 
   //   from parent you can pass from given options which defined here ie from (a/b/c) , if you pass any different it will throw error
