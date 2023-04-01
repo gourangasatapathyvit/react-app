@@ -6,6 +6,8 @@ import "./app.css";
 import NavBar from "./Components/ShoppingCart/NavBar/NavBar";
 import AllItems from "./Components/ShoppingCart/Cart/AllItems";
 import DynamicText from "./Components/CollapseText/DynamicText";
+import Form from "./Components/Forms/Form";
+import ReactForm from "./Components/Forms/ReactForm";
 
 function App() {
   // const items = ["a", "b", "c"];
@@ -13,8 +15,16 @@ function App() {
   let onSelectItem = (item: string) => {
     console.log(item);
   };
+
+  let printJson = (item: object) => {
+    console.log("lorem", item);
+  };
+
   return (
     <>
+      {/* <Form /> */}
+      <ReactForm jsonItem={printJson} />
+
       <div>
         <ListGroup
           items={items}
