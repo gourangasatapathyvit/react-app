@@ -1,31 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import ProductList from "./ProductList";
 
-import axios, { AxiosError, CanceledError } from "axios";
-
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
-}
+// import axios, { AxiosError, CanceledError } from "axios";
+import apiClient, { CanceledError } from "../../services/apiClient";
+import userService, { User } from "../../services/userService";
 
 const Loading = () => {
   const ref = useRef<HTMLInputElement>(null);
@@ -34,13 +12,17 @@ const Loading = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  let onSelectItem = (item: string) => {
+    setTemp(item);
+  };
+
   useEffect(() => {
     if (ref.current) ref.current.focus();
     document.title = "lorem";
   }, []);
 
   useEffect(() => {
-    const controller = new AbortController();
+    // const controller = new AbortController();
 
     /*     const getCall = async () => {
       try {
@@ -56,8 +38,9 @@ const Loading = () => {
     getCall(); */
 
     setLoading(true);
-    axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/users", {
+    /* using apiclient only
+    apiClient
+      .get<User[]>("/users", {
         signal: controller.signal,
       })
       .then((res) => {
@@ -68,24 +51,37 @@ const Loading = () => {
         if (err instanceof CanceledError) return;
         setError("true");
         setLoading(false);
+      }); */
+
+    const { request, cancel } = userService.getAllUser();
+    request
+      .then((res) => {
+        setUserData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError("true");
+        setLoading(false);
       });
-
-    return () => controller.abort();
+    return () => {
+      cancel();
+    };
   }, []);
-
-  let onSelectItem = (item: string) => {
-    setTemp(item);
-  };
 
   let deleteUser = (item: User) => {
     let originalUserData = [...userData];
     setUserData(userData.filter((ele) => ele.id != item.id));
-    axios
-      .delete("https://jsonplaceholder.typicode.com/users/" + item.id)
-      .catch((err) => {
-        setError(err.message);
-        setUserData(originalUserData);
-      });
+
+    /*     apiClient.delete("/users/" + item.id).catch((err) => {
+      setError(err.message);
+      setUserData(originalUserData);
+    }); */
+
+    userService.deleteUser(item).catch((err) => {
+      setError(err.message);
+      setUserData(originalUserData);
+    });
   };
 
   let addUser = () => {
@@ -95,8 +91,16 @@ const Loading = () => {
       name: "polo",
     };
     // setUserData([dummyData as User, ...userData]);
-    axios
-      .post("https://jsonplaceholder.typicode.com/users", dummyData)
+    /*  apiClient
+      .post("/users", dummyData)
+      .then((res) => setUserData([res.data, ...userData]))
+      .catch((err) => {
+        setError(err.message);
+        setUserData(originalUserData);
+      }); */
+
+    userService
+      .addUser(dummyData as User)
       .then((res) => setUserData([res.data, ...userData]))
       .catch((err) => {
         setError(err.message);
@@ -112,15 +116,21 @@ const Loading = () => {
     //   userData.map((eachData) => (eachData.id === item.id ? newUser : eachData))
     // );
 
-    axios
-      .put("https://jsonplaceholder.typicode.com/users/" + item.id, newUser)
-      .then((res) => {
-        setUserData(
-          userData.map((eachData) =>
-            eachData.id === item.id ? res.data : eachData
-          )
-        );
-      });
+    /*   apiClient.put("/users/" + item.id, newUser).then((res) => {
+      setUserData(
+        userData.map((eachData) =>
+          eachData.id === item.id ? res.data : eachData
+        )
+      );
+    }); */
+
+    userService.updateUser(newUser).then((res) => {
+      setUserData(
+        userData.map((eachData) =>
+          eachData.id === item.id ? res.data : eachData
+        )
+      );
+    });
   };
 
   return (
