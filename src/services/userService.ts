@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-
+import create from "./httpServices";
 export interface User {
   id: number;
   name: string;
@@ -24,27 +24,4 @@ export interface User {
   };
 }
 
-class UserService {
-  getAllUser() {
-    const controller = new AbortController();
-    const request = apiClient.get<User[]>("/users", {
-      signal: controller.signal,
-    });
-
-    return { request, cancel: () => controller.abort() };
-  }
-
-  deleteUser(item: User) {
-    return apiClient.delete("/users/" + item.id);
-  }
-
-  addUser(user: User) {
-    return apiClient.post("/users", user);
-  }
-
-  updateUser(user: User) {
-    return apiClient.put("/users/" + user.id, user);
-  }
-}
-
-export default new UserService();
+export default create("/users");

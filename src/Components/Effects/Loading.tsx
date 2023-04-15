@@ -53,7 +53,7 @@ const Loading = () => {
         setLoading(false);
       }); */
 
-    const { request, cancel } = userService.getAllUser();
+    const { request, cancel } = userService.getAllItem<User>();
     request
       .then((res) => {
         setUserData(res.data);
@@ -78,7 +78,12 @@ const Loading = () => {
       setUserData(originalUserData);
     }); */
 
-    userService.deleteUser(item).catch((err) => {
+    /* userService.deleteUser(item).catch((err) => {
+      setError(err.message);
+      setUserData(originalUserData);
+    }); */
+
+    userService.deleteItem<User>(item).catch((err) => {
       setError(err.message);
       setUserData(originalUserData);
     });
@@ -99,8 +104,16 @@ const Loading = () => {
         setUserData(originalUserData);
       }); */
 
-    userService
+    /* userService
       .addUser(dummyData as User)
+      .then((res) => setUserData([res.data, ...userData]))
+      .catch((err) => {
+        setError(err.message);
+        setUserData(originalUserData);
+      }); */
+
+    userService
+      .addItem<User>(dummyData as User)
       .then((res) => setUserData([res.data, ...userData]))
       .catch((err) => {
         setError(err.message);
@@ -124,7 +137,15 @@ const Loading = () => {
       );
     }); */
 
-    userService.updateUser(newUser).then((res) => {
+    /* userService.updateUser(newUser).then((res) => {
+      setUserData(
+        userData.map((eachData) =>
+          eachData.id === item.id ? res.data : eachData
+        )
+      );
+    }); */
+
+    userService.updateItem<User>(newUser).then((res) => {
       setUserData(
         userData.map((eachData) =>
           eachData.id === item.id ? res.data : eachData
